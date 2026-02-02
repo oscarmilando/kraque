@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="pt-pt">
+<head>
+    <meta charset="UTF-8">
+    <title>KraQue-Login</title>
+    <link rel="shortcut icon" href="../icon.png" type="image/x-icon">
+
+    <style>
+        :root {
+            /* Cor Principal Alterada */
+            --primary: #00d10a; 
+            --primary-glow: rgba(0, 209, 10, 0.3);
+            --transition: all 0.3s ease;
+            --dark: #121212;
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
+
+        body { 
+            background: #121212; 
+            color: white; 
+            font-family: sans-serif; 
+        
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; margin: 0; }
+        section{
+            background: #121212; 
+            color: white; 
+            font-family: sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; margin: 0; 
+        }
+
+        .card { 
+            background: #1e1e1e;
+            padding: 30px; 
+            border-radius: 
+            12px; width: 300px; 
+            text-align: center; 
+            border: 1px solid #333; 
+        }
+        input { 
+            width: 100%; 
+            padding: 12px; 
+            margin: 10px 0; 
+            border-radius: 
+            6px; border: 1px solid #444; 
+            background: #252525; 
+            color: white; 
+            box-sizing: border-box; 
+        }
+        .button { 
+            width: 100%; 
+            padding: 12px; 
+            background-color: #00d10a;
+            border: none; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border-radius: 6px; 
+        }
+        .button:hover{
+            background: #f39c12;
+        }
+        .logo {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+    }
+
+    .logo span { color: var(--primary); }
+
+    /* Menu e Navegação */
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 20px 10%;
+        position: absolute;
+        width: 100%;
+        z-index: 1000;
+        transition: var(--transition);
+    }
+
+    nav.sticky {
+        position: fixed;
+        background: rgba(0, 0, 0, 0.95);
+        padding: 10px 10%;
+    }
+    .nav-links { display: flex; list-style: none; }
+
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover { color: var(--gold); }
+
+@media (max-width: 768px) {
+    nav { background: var(--dark); padding: 15px 20px; position: fixed; }
+    .menu-toggle { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .bar { width: 25px; height: 3px; background: white; transition: 0.4s; }
+    
+    .nav-links {
+        position: fixed; right: -100%; top: 60px; width: 100%; height: calc(100vh - 60px);
+        background: var(--dark); flex-direction: column; align-items: center; padding-top: 50px; transition: 0.4s;
+    }
+    .nav-links.active { right: 0; }
+    .nav-links li { margin: 20px 0; }
+    .price-container { flex-direction: column; }
+    .hero-content { padding: 40px 20px; width: 90%; }
+}
+    </style>
+
+</head>
+<body>
+    <nav id="main-nav">
+        <div class="logo">Kra<span>Q</span>ue</div>
+        
+        <button class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="./lista.html">Agendar Agora</a></li>
+            <li class="item_menu"><a href="./login.html">Login</a></li>
+        </ul>
+    </nav>
+
+<section>
+    <div class="card">
+        <div class="logo">Kra<span>Q</span>ue</div>
+        <form id="loginForm">
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="password" id="senha" placeholder="Palavra-passe" required>
+            <button type="submit" class="button">ENTRAR</button>
+        </form>
+    </div>
+</section>    
+    
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        const firebaseConfig = {
+            apiKey: "AIzaSyCCfSRzhfRc2KCq5nJnVUHl4sgCBAflAEc",
+            authDomain: "boyzzon-cortes.firebaseapp.com",
+            projectId: "boyzzon-cortes",
+            storageBucket: "boyzzon-cortes.firebasestorage.app",
+            messagingSenderId: "546742664914",
+            appId: "1:546742664914:web:94586adeb4c129d233370b"
+        };
+        
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                await signInWithEmailAndPassword(auth, email.value, senha.value);
+                window.location.href = "admin.html";
+            } catch { alert("Credenciais inválidas!"); }
+        });
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

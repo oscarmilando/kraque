@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KraQue Pro</title>
+    <style>
+
+:root {
+    /* Alterado de dourado para Verde */
+    --gold: #00d10a; 
+    --dark: #121212;
+    --light: #f4f4f4;
+    --transition: all 0.3s ease;
+}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: sans-serif; color: #fff; overflow: hidden;
+            justify-content: center
+        }
+
+        .cont{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Barra de progresso no topo */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px;
+            background: #00f2ea; z-index: 1000; width: 0%;
+            transition: width 0.2s;
+
+        }
+
+        .kraque-container {
+            height: 100vh; overflow-y: scroll;
+            scroll-snap-type: y mandatory; scrollbar-width: none;
+            max-width: 500px;
+
+        }
+        .kraque-container::-webkit-scrollbar { display: none; }
+
+        .photo-card {
+            position: relative; height: 100vh; width: 100%;
+            scroll-snap-align: start; background: #111;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Botões Laterais */
+        .side-bar {
+            position: absolute; right: 15px; bottom: 100px;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            z-index: 10;
+        }
+        .action-btn { background: none; border: none; color: white; cursor: pointer; text-align: center; }
+        .action-btn span { font-size: 0.7rem; display: block; margin-top: 5px; }
+        .icon { font-size: 28px; }
+
+        .info-bottom {
+            position: absolute; bottom: 30px; left: 15px; right: 80px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+        }
+
+        /* Animação do Coração */
+        .heart-pop {
+            position: absolute; font-size: 100px; color: #ff0050;
+            opacity: 0; pointer-events: none; z-index: 20;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition);
+    background-color: #121212;;
+}
+
+nav.sticky {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 10px 10%;
+}
+
+.logo {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.logo span { color: var(--gold); }
+
+.nav-links { display: flex; list-style: none; }
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover { color: var(--gold); }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav { background:#121212; padding: 15px 20px; position: fixed; }
+    .menu-toggle { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .bar { width: 25px; height: 3px; background: white; transition: 0.4s; }
+    
+    .nav-links {
+        position: fixed; right: -100%; top: 60px; width: 100%; height: calc(100vh - 60px);
+        background: var(--dark); flex-direction: column; align-items: center; padding-top: 50px; transition: 0.4s;
+    }
+    .nav-links.active { right: 0; }
+    .nav-links li { margin: 20px 0; }
+    .price-container { flex-direction: column; }
+    .hero-content { padding: 40px 20px; width: 90%; }
+}
+
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <nav id="main-nav">
+        <div class="logo">Kra<span>Q</span>ue</div>
+        
+        <button class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="./pages/lista.html">Agendar Agora</a></li>
+            <li class="item_menu"><a href="./pages/login.html">Login</a></li>
+        </ul>
+    </nav>
+
+<div class="cont">
+    <div class="kraque-container" id="feed">
+    </div>
+</div>
+    
+    <script>
+        const photos = [
+            { url: "../images/home/pintura.jpeg", user: "@lonely_traveler", likes: "12k" },
+            { url: "https://images.unsplash.com/photo-1493246507139-91e8fad9978e", user: "@mountain_high", likes: "8.5k" },
+            { url: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34", user: "@paris_vibes", likes: "45k" }
+        ];
+
+        const feed = document.getElementById('feed');
+        const progressBar = document.getElementById('progress-bar');
+
+        photos.forEach(p => {
+            const card = document.createElement('div');
+            card.className = 'photo-card';
+            card.innerHTML = `
+                <img src="${p.url}" loading="lazy">
+                <div class="heart-pop">❤️</div>
+                <div class="side-bar">
+                   
+                </div>
+                <div class="info-bottom">
+                    <h3>${p.user}</h3>
+                    <p>Mais um dia incrível explorando o mundo com o KraQue! #travel #photography</p>
+                </div>
+            `;
+
+            // Double click para curtir
+            card.addEventListener('dblclick', (e) => {
+                const heart = card.querySelector('.heart-pop');
+                heart.style.animation = 'pop 0.6s ease-out';
+                setTimeout(() => heart.style.animation = '', 600);
+            });
+
+            feed.appendChild(card);
+        });
+
+        // Atualizar barra de progresso
+        feed.addEventListener('scroll', () => {
+            const winScroll = feed.scrollTop;
+            const height = feed.scrollHeight - feed.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            progressBar.style.width = scrolled + "%";
+        });
+
+        function share() {
+            if (navigator.share) {
+                navigator.share({ title: 'KraQue', text: 'Olha essa foto!', url: window.location.href });
+            } else {
+                alert("Link copiado!");
+            }
+        }
+
+        function like(btn) {
+            btn.style.color = btn.style.color === 'red' ? 'white' : 'red';
+        }
+    </script>
+    <script src="../js/main.js"></script>
+</body>
+</html>

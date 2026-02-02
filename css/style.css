@@ -1,0 +1,447 @@
+:root {
+    /* Alterado de dourado para Verde */
+    --gold: #00d10a; 
+    --dark: #121212;
+    --light: #f4f4f4;
+    --transition: all 0.3s ease;
+}
+
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--light);
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Menu e Navegação */
+
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition);
+}
+
+nav.sticky {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 10px 10%;
+}
+
+.logo {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.logo span { color: var(--gold); }
+
+.nav-links { display: flex; list-style: none; }
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover { color: var(--gold); }
+
+/* Hero Section */
+.hero {
+    height: 100vh;
+    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1585747860715-2ba37e788b70?q=80&w=2074') center/cover no-repeat;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-content {
+    /* IMAGEM DE FUNDO NA DIV SOLICITADA */
+    background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1621605815841-aa33c544f8fc?w=800');
+    background-size: cover;
+    background-position: center;
+    padding: 60px 80px;
+    text-align: center;
+    color: white;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+}
+
+.hero-content h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    letter-spacing: 8px;
+    margin: 10px 0;
+    color: var(--gold);
+}
+
+.divider { 
+    border-bottom: 1px solid var(--gold); 
+    width: 150px; 
+    margin: 20px auto; 
+    position: relative; 
+}
+.divider span { 
+    position: absolute; 
+    top: -12px; 
+    left: 45%; 
+    background: transparent; 
+    padding: 0 10px; color: var(--gold); 
+}
+
+/* Seções Gerais */
+section { padding: 100px 10%; text-align: center; }
+h2 { font-family: 'Playfair Display', serif; font-size: 2.5rem; margin-bottom: 10px; }
+.section-divider { color: var(--gold); margin-bottom: 40px; }
+
+/* Serviços */
+.service-grid { display: flex; justify-content: space-around; gap: 20px; flex-wrap: wrap; }
+.circle-img { width: 220px; height: 220px; border-radius: 50%; overflow: hidden; border: 4px solid var(--gold); margin: 0 auto 20px; }
+.circle-img img { width: 100%; height: 100%; object-fit: cover; transition: var(--transition); }
+.circle-img:hover img { transform: scale(1.1); }
+
+/* Preços */
+.price-section { background: #fff; }
+.price-container { display: flex; align-items: center; gap: 50px; text-align: left; }
+.price-image { flex: 1; }
+.price-image img { width: 100%; border-radius: 5px; box-shadow: 20px 20px 0 var(--gold); max-width: 350px;}
+.price-list-wrapper { flex: 1; }
+.price-list { list-style: none; margin: 30px 0; }
+.price-list li { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px dotted #ccc; }
+
+.btn-gold {
+    background: var(--gold);
+    color: black;
+    padding: 15px 40px;
+    border: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: var(--transition);
+    color: white;
+    text-decoration: none;
+}
+
+.btn-gold a{
+    color: white;
+    text-decoration: none;
+}
+.btn-gold:hover { background: #b8962e; transform: translateY(-3px); }
+
+/* Barbeiros */
+.barber-grid { display: flex; justify-content: center; gap: 50px; flex-wrap: wrap; }
+.barber-card img { width: 180px; height: 180px; border-radius: 50%; object-fit: cover; filter: grayscale(100%); transition: var(--transition); border: 2px solid var(--gold); }
+.barber-card:hover img { filter: grayscale(0%); }
+
+/* WhatsApp */
+.whatsapp-float { position: fixed; bottom: 30px; right: 30px; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; z-index: 1000; }
+.whatsapp-float img { width: 35px; }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav { background: var(--dark); padding: 15px 20px; position: fixed; }
+    .menu-toggle { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .bar { width: 25px; height: 3px; background: var(--gold); transition: 0.4s; }
+    
+    .nav-links {
+        position: fixed; right: -100%; top: 60px; width: 100%; height: calc(100vh - 60px);
+        background: var(--dark); flex-direction: column; align-items: center; padding-top: 50px; transition: 0.4s;
+    }
+    .nav-links.active { right: 0; }
+    .nav-links li { margin: 20px 0; }
+    .price-container { flex-direction: column; }
+    .hero-content { padding: 40px 20px; width: 90%; }
+}
+
+footer { 
+    background: var(--dark); 
+    color: #777; padding: 40px; 
+    text-align: center; }
+
+#preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+
+/* Quando esta classe for adicionada, ele desaparece */
+#preloader.loader-finish {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none; /* Garante que o usuário consiga clicar no site abaixo */
+}
+
+.loader-content {
+    text-align: center;
+}
+
+.loader-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    color: #fff;
+    font-weight: bold;
+    letter-spacing: 5px;
+    margin-bottom: 20px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loader-logo span {
+    color: var(--gold);
+}
+
+.loader-bar {
+    width: 100px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.loader-bar::after {
+    content: '';
+    position: absolute;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--gold);
+    animation: loading 1.5s infinite;
+}
+
+/* Animações do Preloader */
+@keyframes pulse {
+    0% { opacity: 0.5; transform: scale(0.95); }
+    50% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.5; transform: scale(0.95); }
+}
+
+@keyframes loading {
+    0% { left: -100%; }
+    100% { left: 100%; }
+}
+
+/* Classe para esconder o preloader via JS */
+.loader-finish {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.stats-section {
+    background: var(--dark);
+    display: flex;
+    justify-content: space-around;
+    padding: 60px 10%;
+    color: white;
+    text-align: center;
+}
+.stat-item h2 {
+    color: var(--gold);
+    font-size: 3rem;
+    margin-bottom: 5px;
+}
+.stat-item p {
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 0.8rem;
+}
+
+.info-section { padding: 80px 10%; background: #fff; }
+.info-container { display: flex; gap: 50px; flex-wrap: wrap; }
+.hours-box, .faq-box { flex: 1; min-width: 300px; }
+
+.hours-box ul { list-style: none; margin-top: 20px; }
+.hours-box li { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+
+/* Acordeão FAQ */
+.accordion-item { border-bottom: 1px solid #ddd; }
+.accordion-header {
+    width: 100%; padding: 15px 0; text-align: left;
+    background: none; border: none; font-weight: bold;
+    cursor: pointer; display: flex; justify-content: space-between;
+    font-family: 'Montserrat', sans-serif;
+}
+.accordion-body { 
+    max-height: 0; overflow: hidden; 
+    transition: max-height 0.3s ease-out; 
+    font-size: 0.9rem; color: #666; 
+}
+.accordion-item.active .accordion-body { max-height: 100px; padding-bottom: 15px; }
+
+/* Rodapé Estratégico */
+.main-footer {
+    background-color: #0a0a0a;
+    color: #fff;
+    padding: 80px 10% 20px;
+    border-top: 2px solid var(--gold);
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 40px;
+    flex-wrap: wrap;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 250px;
+}
+
+.footer-column h3 {
+    color: var(--gold);
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.footer-desc {
+    font-size: 0.9rem;
+    color: #bbb;
+    margin-top: 20px;
+    line-height: 1.8;
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links li a {
+    color: #bbb;
+    text-decoration: none;
+    transition: var(--transition);
+    font-size: 0.9rem;
+}
+
+.footer-links li a:hover {
+    color: var(--gold);
+    padding-left: 5px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.social-icons a img {
+    width: 24px;
+    filter: invert(1); /* Deixa os ícones brancos */
+    transition: var(--transition);
+}
+
+.social-icons a:hover img {
+    transform: translateY(-5px);
+    filter: invert(0.7) sepia(1) saturate(5) hue-rotate(10deg); /* Efeito dourado */
+}
+
+.footer-bottom {
+    margin-top: 60px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    text-align: center;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+/* Responsividade do Footer */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .social-icons {
+        justify-content: center;
+    }
+}
+
+/* Efeito de Brilho nos Botões */
+.btn-gold {
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-gold::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 20%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.4);
+    transform: rotate(30deg);
+    transition: 0.5s;
+    list-style: none;
+}
+
+.btn-gold:hover::after {
+    left: 120%;
+}
+
+/* Estilo Depoimentos */
+.testimonials-section { background: #1a1a1a; color: white; }
+.testimonial-card {
+    background: #222;
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    border-bottom: 3px solid var(--gold);
+}
+.testimonial-card p { font-style: italic; margin-bottom: 20px; }
+.stars { color: var(--gold); font-size: 1.2rem; }
+
+#servicos, #barbeiros{
+    background-color: #0a0a0a;
+    color: white;
+}
+
+
+/* Dispaly block    for Deaful Scroll bar */
+
+html::-webkit-scrollbar{
+    display: none;
+}
+
+/* custon scroll bar */
+
+.progress{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 4px;
+    z-index: 300;
+    width: 100%;
+}
+
+.progress-bar{
+    height: 4px;
+    background: var(--gold);
+    width: 0%;
+}

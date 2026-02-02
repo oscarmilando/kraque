@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KraQue Galeria</title>
+    <link rel="shortcut icon" href="../icon.png" type="image/x-icon">
+    <style>
+
+:root {
+    --gold: #00d10a; 
+    --dark: #121212;
+    --light: #f4f4f4;
+    --transition: all 0.3s ease;
+}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #000; font-family: sans-serif; color: #fff; overflow: hidden;
+            justify-content: center
+        }
+
+        .cont{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Barra de progresso no topo */
+        #progress-bar {
+            position: fixed; top: 0; left: 0; height: 4px;
+            background: #00f2ea; z-index: 1000; width: 0%;
+            transition: width 0.2s;
+
+        }
+
+        .kraque-container {
+            height: 100vh; overflow-y: scroll;
+            scroll-snap-type: y mandatory; scrollbar-width: none;
+            max-width: 500px;
+
+        }
+        .kraque-container::-webkit-scrollbar { display: none; }
+
+        .photo-card {
+            position: relative; height: 100vh; width: 100%;
+            scroll-snap-align: start; background: #111;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Botões Laterais */
+        .side-bar {
+            position: absolute; right: 15px; bottom: 100px;
+            display: flex; flex-direction: column; align-items: center; gap: 20px;
+            z-index: 10;
+        }
+        .action-btn { background: none; border: none; color: white; cursor: pointer; text-align: center; }
+        .action-btn span { font-size: 0.7rem; display: block; margin-top: 5px; }
+        .icon { font-size: 28px; }
+
+        .info-bottom {
+            position: absolute; bottom: 30px; left: 15px; right: 80px;
+            text-shadow: 1px 1px 5px rgba(0,0,0,0.8);
+        }
+
+        /* Animação do Coração */
+        .heart-pop {
+            position: absolute; font-size: 100px; color: #ff0050;
+            opacity: 0; pointer-events: none; z-index: 20;
+            text-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        @keyframes pop {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 10%;
+    position: absolute;
+    width: 100%;
+    z-index: 1000;
+    transition: var(--transition);
+    background-color: #121212;;
+}
+
+nav.sticky {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.95);
+    padding: 10px 10%;
+}
+
+.logo {
+    color: white;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: bold;
+}
+
+.logo span { color: var(--gold); }
+
+.nav-links { display: flex; list-style: none; }
+
+.nav-links li a {
+    color: white;
+    text-decoration: none;
+    margin-left: 30px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: var(--transition);
+}
+
+.nav-links li a:hover { color: var(--gold); }
+
+/* Responsividade */
+@media (max-width: 768px) {
+    nav { background:#121212; padding: 15px 20px; position: fixed; }
+    .menu-toggle { display: flex; flex-direction: column; gap: 5px; background: none; border: none; cursor: pointer; }
+    .bar { width: 25px; height: 3px; background: white; transition: 0.4s; }
+    
+    .nav-links {
+        position: fixed; right: -100%; top: 60px; width: 100%; height: calc(100vh - 60px);
+        background: var(--dark); flex-direction: column; align-items: center; padding-top: 50px; transition: 0.4s;
+    }
+    .nav-links.active { right: 0; }
+    .nav-links li { margin: 20px 0; }
+    .price-container { flex-direction: column; }
+    .hero-content { padding: 40px 20px; width: 90%; }
+}
+/* Container do Spinner */
+.loader-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    scroll-snap-align: end;
+}
+
+/* O desenho do Spinner */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(255, 255, 255, 0.1);
+    border-left-color: var(--gold); /* Usa o verde que você definiu */
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+
+/* Card principal com efeito de profundidade */
+.photo-card {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    scroll-snap-align: start;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #222; /* Divisor sutil entre fotos */
+}
+
+/* Gradiente para leitura do texto */
+.photo-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 30%;
+    background: linear-gradient(transparent, rgba(0,0,0,0.8));
+    pointer-events: none;
+}
+
+/* Barra lateral de ações (Glassmorphism) */
+.side-bar {
+    position: absolute;
+    right: 15px;
+    bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+}
+
+.action-btn {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: var(--transition);
+}
+
+.action-btn:hover {
+    transform: scale(1.1);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.action-btn span {
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 2px;
+}
+
+/* Informações do rodapé */
+.info-bottom {
+    position: absolute;
+    bottom: 40px;
+    left: 20px;
+    right: 80px;
+    z-index: 11;
+}
+
+.info-bottom h3 {
+    font-size: 1.1rem;
+    margin-bottom: 5px;
+    color: var(--gold); /* Verde destaque */
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.info-bottom h3::after {
+    content: '✔'; /* Selo de verificado */
+    font-size: 10px;
+    background: #00d10a;
+    color: #000;
+    border-radius: 50%;
+    padding: 2px 4px;
+}
+
+.info-bottom p {
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: #eee;
+}
+    </style>
+</head>
+<body>
+
+    <div id="progress-bar"></div>
+    <nav id="main-nav">
+        <div class="logo">Kra<span>Q</span>ue</div>
+        
+        <button class="menu-toggle" id="mobile-menu">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="../index.html">Home</a></li>
+            <li><a href="./lista.html">Agendar Agora</a></li>
+            <li class="item_menu"><a href="./login.html">Login</a></li>
+        </ul>
+    </nav>
+
+<div class="cont">
+    <div class="kraque-container" id="feed"></div>
+</div>
+
+<script>
+    // 1. Sua lista completa de arquivos locais
+    const bancoDeFotos = [
+        "img01.jpeg",
+        "img02.jpeg",
+        "img03.jpeg",
+        "img04.jpeg",
+        "img05.jpeg",
+        "img06.jpeg",
+        "img07.jpeg",
+        "img08.jpeg",
+        "img09.jpeg",
+        "img11.jpeg",
+        "img12.jpeg",
+        "img13.jpeg",
+        "img14.jpeg",
+        "img15.jpeg",
+        "img16.jpeg",
+        "img17.jpeg",
+        "img18.jpeg",
+        "img19.jpeg",
+        "img20.jpeg",
+        "img21.jpeg",
+        "img22.jpeg",
+        "img23.jpeg",
+        "img24.jpeg",
+        "img25.jpeg",
+        "img26.jpeg",
+        "img27.jpeg",
+        "img28.jpeg",
+        "img29.jpeg",
+        "img30.jpeg",
+        "img31.jpeg",
+        "img32.jpeg",
+        "img33.jpeg",
+        "img34.jpeg",
+        "img35.jpeg",
+        "img36.jpeg",
+        "img37.jpeg",
+        "img38.jpeg",
+        "img39.jpeg",
+        "img40.jpeg",
+        "img41.jpeg",
+        "img42.jpeg",
+        "img43.jpeg",
+        "img44.jpeg",
+        "img45.jpeg",
+        "img46.jpeg",
+        "img47.jpeg",
+        "img48.jpeg",
+        "img49.jpeg",
+        "img50.jpeg",
+        "img51.jpeg",
+        "img52.jpeg",
+        "img53.jpeg",
+        "img54.jpeg",
+        "img55.jpeg",
+        "img56.jpeg",
+        "img57.jpeg",
+        "img58.jpeg",
+        "img59.jpeg",
+        "img60.jpeg",
+        "img61.jpeg",
+        "img62.jpeg",
+        "img63.jpeg",
+        "img64.jpeg",
+        "img65.jpeg",
+        "img66.jpeg",
+        "img67.jpeg",
+        "img68.jpeg",
+        "img69.jpeg",
+        "img70.jpeg",
+        "img71.jpeg",
+        "img72.jpeg",
+        "img73.jpeg",
+        "img74.jpeg",
+        "img75.jpeg",
+        "img76.jpeg",
+        "img77.jpeg",
+        "img78.jpeg",
+        "img79.jpeg",
+        "img80.jpeg",
+        "img81.jpeg",
+        "img82.jpeg",
+        "img83.jpeg",
+        "img84.jpeg",
+        "img85.jpeg",
+        "img86.jpeg",
+        "img87.jpeg",
+        "img88.jpeg",
+        "img89.jpeg",
+        "img90.jpeg",
+        "img91.jpeg",
+        "img92.jpeg",
+        "img93.jpeg",
+        "img94.jpeg",
+        "img95.jpeg",
+        "img96.jpeg"
+    ];
+
+    // Cópia da lista que será manipulada (para não perder a original)
+    let fotosDisponiveis = [...bancoDeFotos];
+    
+    const pastaRaiz = "../images/galeria/";
+    const feed = document.getElementById('feed');
+    const progressBar = document.getElementById('progress-bar');
+    let isLoading = false;
+
+    function createPhotoCard(nomeArquivo) {
+        const card = document.createElement('div');
+        card.className = 'photo-card';
+        card.innerHTML = `
+            <img src="${pastaRaiz + nomeArquivo}" loading="lazy">
+     
+            <div class="info-bottom">
+                <h3>@KraQue BarberShop</h3>
+                <p>Foto exclusiva do arquivo: ${nomeArquivo}</p>
+            </div>
+        `;
+        return card;
+    }
+
+    function loadMorePhotos() {
+        if (isLoading || fotosDisponiveis.length === 0) {
+            if (fotosDisponiveis.length === 0) console.log("Fim das fotos disponíveis.");
+            return;
+        }
+
+        isLoading = true;
+        toggleLoader(true);
+
+        setTimeout(() => {
+            toggleLoader(false);
+            
+            // Define quantas fotos carregar por vez (ex: 2 fotos ou o que restar)
+            const quantidadeParaCarregar = Math.min(2, fotosDisponiveis.length);
+
+            for (let i = 0; i < quantidadeParaCarregar; i++) {
+                // Escolhe um índice aleatório dentro do que AINDA está disponível
+                const indexAleatorio = Math.floor(Math.random() * fotosDisponiveis.length);
+                
+                // Remove o item da lista (splice retorna o item removido)
+                const fotoSorteada = fotosDisponiveis.splice(indexAleatorio, 1)[0];
+
+                feed.appendChild(createPhotoCard(fotoSorteada));
+            }
+            
+            isLoading = false;
+        }, 1000);
+    }
+
+    // Funções auxiliares (Loader e Scroll) permanecem as mesmas
+    function toggleLoader(show) {
+        const existingLoader = document.querySelector('.loader-container');
+        if (show && !existingLoader) {
+            const loader = document.createElement('div');
+            loader.className = 'loader-container';
+            loader.innerHTML = '<div class="spinner"></div>';
+            feed.appendChild(loader);
+        } else if (!show && existingLoader) {
+            existingLoader.remove();
+        }
+    }
+
+    feed.addEventListener('scroll', () => {
+        const winScroll = feed.scrollTop;
+        const totalHeight = feed.scrollHeight - feed.clientHeight;
+        progressBar.style.width = (winScroll / totalHeight) * 100 + "%";
+
+        if (feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 100) {
+            loadMorePhotos();
+        }
+    });
+
+    // Início imediato
+    loadMorePhotos();
+</script>
+    <script src="../js/main.js"></script>
+</body>
+</html>
